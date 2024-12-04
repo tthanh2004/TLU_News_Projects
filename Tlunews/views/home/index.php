@@ -77,6 +77,19 @@ if (session_status() == PHP_SESSION_NONE) {
                     </li>
                 <?php endforeach; ?>
             </ul>
+        <?php elseif (!isset($_GET['keyword'])): ?>
+            <?php if (!empty($newsList)): ?>
+                <ul class="list-group mt-4">
+                    <?php foreach ($newsList as $news): ?>
+                        <li class="list-group-item">
+                            <h4><?php echo htmlspecialchars($news['title']); ?></h4>
+                            <p><?php echo htmlspecialchars($news['content']); ?></p>
+                            <img src="assets/image/<?php echo $news['image'] ?>" style="width: 200px;" alt="">
+                            <a href="index.php?controller=news&action=detail&id=<?php echo $news['id']; ?>" class="btn btn-info">Chi tiết</a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 

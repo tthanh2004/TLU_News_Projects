@@ -19,6 +19,7 @@ class News
 
     public function searchNews($keyword)
     {
+        // Câu lệnh SQL cải tiến với tham số từ khóa đã được xử lý
         $stmt = $this->pdo->prepare(
             "SELECT n.id AS news_id, 
             n.title, 
@@ -32,7 +33,9 @@ class News
         OR n.content LIKE :keyword"
         );
 
-        $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+
+        // Liên kết giá trị cho tham số :keyword
+        $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR); // Đảm bảo từ khóa được xử lý đúng
 
         // Thực thi câu lệnh SQL
         $stmt->execute();
@@ -41,6 +44,42 @@ class News
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+
+    // Lấy tin tức theo ID
+    public function getNewsById($id)
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM news WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // Thêm tin tức mới
+    public function addNews($title, $content, $image, $category_id)
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO news (title, content, image, category_id) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$title, $content, $image, $category_id]);
+    }
+
+    // Cập nhật tin tức
+    public function updateNews($id, $title, $content, $image, $categoryId)
+    {
+        // Cập nhật câu lệnh SQL để bao gồm trường category_id
+        $stmt = $this->pdo->prepare("UPDATE news SET title = ?, content = ?, image = ?, category_id = ? WHERE id = ?");
+
+        // Thực thi câu lệnh SQL với tất cả các tham số: title, content, image, category_id, id
+        $stmt->execute([$title, $content, $image, $categoryId, $id]);
+    }
+
+
+    // Xóa tin tức
+    public function deleteNews($id)
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM news WHERE id = ?");
+        $stmt->execute([$id]);
+    }
+
+    // Lấy tin tức theo phân trang
     public function getNewsByPage($category = null)
     {
         if ($category != null) {
@@ -50,14 +89,6 @@ class News
         }
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    // Lấy tin tức theo ID
-    public function getNewsById($id)
-    {
-        $stmt = $this->pdo->prepare("SELECT * FROM news WHERE id = ?");
-        $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     // Lấy tổng số tin tức

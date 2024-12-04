@@ -63,6 +63,42 @@ try {
                 echo "Vui lòng nhập từ khóa tìm kiếm!";
             }
             break;
+        case 'add_news':
+            if ($_SESSION['user']['role'] === 1) {
+                if (!isset($_SESSION['user'])) {
+                    header('Location: views/admin/login.php');
+                    exit();
+                }
+                $controller = new NewsController();
+                $controller->create();
+            } else {
+                echo 'Bạn không phải ADMIN';
+            }
+            break;
+        case 'edit_news':
+            if ($_SESSION['user']['role'] === 1) {
+                if (isset($_GET['id'])) {
+                    $controller = new NewsController();
+                    $controller->update($_GET['id']);
+                } else {
+                    echo "ID không hợp lệ";
+                }
+            } else {
+                echo 'Bạn không phải ADMIN';
+            }
+            break;
+        case 'delete_news':
+            if ($_SESSION['user']['role'] === 1) {
+                if (isset($_GET['id'])) {
+                    $controller = new NewsController();
+                    $controller->delete($_GET['id']);
+                } else {
+                    echo "ID không hợp lệ";
+                }
+            } else {
+                echo 'Bạn không phải ADMIN';
+            }
+            break;
         default:
             $controller = new HomeController();
             $controller->index();

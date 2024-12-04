@@ -17,6 +17,20 @@
 </head>
 
 <body class="bg-light">
+    <?php
+    if (isset($_GET["error"])) {
+    ?>
+        <script>
+            Swal.fire({
+                icon: "error",
+                title: "Sai bà tài khoản, mật khẩu",
+                text: "Something went wrong!",
+                footer: '<a href="#">Why do I have this issue?</a>'
+            });
+        </script>
+    <?php
+    }
+    ?>
     <div class="container">
         <h2 class="mt-5">Đăng nhập</h2>
         <?php if (isset($error_message)): ?>

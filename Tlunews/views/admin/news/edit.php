@@ -16,6 +16,11 @@ if (session_status() == PHP_SESSION_NONE) {
         <div class="mb-3">
             <label for="category_id" class="form-label">Danh mục</label>
             <select class="form-select" name="category_id" required>
+                <?php foreach ($categories as $category): ?>
+                    <option value="<?= $category['id'] ?>" <?= $category['id'] == $news['category_id'] ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($category['name']) ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
         </div>
         <div class="mb-3">
