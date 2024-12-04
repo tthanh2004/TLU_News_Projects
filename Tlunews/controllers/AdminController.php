@@ -1,4 +1,5 @@
 <?php
+
 require_once 'models/User.php';
 
 class AdminController
@@ -11,10 +12,16 @@ class AdminController
             $user = User::authenticate($username, $password);
             if ($user) {
                 $_SESSION['user'] = $user;
-                header("Location: index.php?controller=admin&action=dashboard");
+
+                if ($user['role'] == 1) {
+                    header("Location: index.php?action=dashboard");
+                } else {
+                    header("Location: index.php?action=home");
+                }
                 exit();
             } else {
                 header("Location: ?error=1");
+                exit();
             }
         } else {
             include "views/admin/login.php";
@@ -23,10 +30,10 @@ class AdminController
 
     public function logout()
     {
-       if (isset($_SESSION['user'])) {
-        session_destroy();
-        include "views/admin/login.php";
-       }
+        if (isset($_SESSION['user'])) {
+            session_destroy();
+            include "views/admin/login.php";
+        }
     }
 
     public function dashboard()
@@ -38,6 +45,7 @@ class AdminController
         $userModel = new User();
 
         // Lấy tổng số tin tức và người dùng
+        $totalNews = $newsModel->getTotalNews();
         $totalUsers = $userModel->getTotalUsers();
         $news = $newsModel->getAllNews();
         // Truyền dữ liệu vào view
