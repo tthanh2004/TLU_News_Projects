@@ -40,7 +40,11 @@ if (session_status() == PHP_SESSION_NONE) {
             <h2>Danh mục tin tức</h2>
         </div>
         <ul class="list-group mt-2">
-
+            <?php foreach ($categories as $category): ?>
+                <a href="?action=home&category=<?php echo $category['id'] ?>">
+                    <li class="list-group-item"><?php echo htmlspecialchars($category['name']); ?></li>
+                </a>
+            <?php endforeach; ?>
         </ul>
     </div>
 

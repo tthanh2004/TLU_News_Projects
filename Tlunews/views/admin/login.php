@@ -20,9 +20,9 @@
     <div class="container">
         <h2 class="mt-5">Đăng nhập</h2>
         <?php if (isset($error_message)): ?>
-        <div class="alert alert-danger" role="alert">
-            <?= $error_message ?>
-        </div>
+            <div class="alert alert-danger" role="alert">
+                <?= $error_message ?>
+            </div>
         <?php endif; ?>
         <form action="?action=login" method="POST">
             <div class="form-group">

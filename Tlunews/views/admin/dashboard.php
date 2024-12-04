@@ -24,6 +24,21 @@ if (session_status() == PHP_SESSION_NONE) {
 </head>
 
 <body>
+    <?php
+    if (isset($_SESSION['user']) && !isset($_SESSION['success'])) {
+        $_SESSION['success'] = 1;
+    ?>
+        <script>
+            Swal.fire({
+                icon: "success",
+                title: "Đăng nhập thành công",
+                text: "Something went wrong!",
+                footer: '<a href="#">Why do I have this issue?</a>'
+            });
+        </script>
+    <?php
+    }
+    ?>
     <div class="container">
         <h2 class="mt-5">Bảng điều khiển</h2>
         <!-- Các nút bấm điều hướng -->
@@ -52,6 +67,25 @@ if (session_status() == PHP_SESSION_NONE) {
                 </tr>
             </thead>
             <tbody>
+                <?php if (isset($news)): ?>
+                    <?php foreach ($news as $item): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($item['news_id']) ?></td>
+                            <td><?= htmlspecialchars($item['title']) ?></td>
+                            <td><?= htmlspecialchars($item['category_name']) ?></td>
+                            <td><img src="assets/image/<?php echo $item['image'] ?>" style="width: 100px;" alt=""> </td>
+                            <td><?= date('d/m/Y', strtotime($item['created_at'])) ?></td>
+                            <td>
+                                <a href="index.php?action=edit_news&id=<?= $item['news_id'] ?>" class="btn btn-primary">Sửa</a>
+                                <a href="index.php?action=delete_news&id=<?= $item['news_id'] ?>" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa tin tức này không?')">Xóa</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="5" class="text-center">Không có tin tức nào</td>
+                    </tr>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>

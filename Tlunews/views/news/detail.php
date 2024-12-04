@@ -1,3 +1,21 @@
+<?php
+// Lấy ID từ URL
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id = $_GET['id'];
+
+    require_once 'models/News.php';
+    $newsModel = new News();
+    $news = $newsModel->getNewsById($id);
+
+    if (!$news) {
+        echo "Tin tức không tồn tại!";
+        exit();
+    }
+} else {
+    echo "ID không hợp lệ!";
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -28,10 +46,10 @@
     <!-- Main Content -->
     <div class="container mt-5">
         <article>
-            <h2 class="mt-4">...</h2>
-            <p class="text-muted">Ngày đăng:</p>
-            <p>img</p>
-            <p class="mt-3">...</p>
+            <h2 class="mt-4"><?= htmlspecialchars($news['title']) ?></h2>
+            <p class="text-muted">Ngày đăng: <?= date('d/m/Y', strtotime($news['created_at'])) ?></p>
+            <img src="assets/image/<?= htmlspecialchars($news['image']) ?>" alt="<?= htmlspecialchars($news['title']) ?>" class="img-fluid mt-3">
+            <p class="mt-3"><?= nl2br(htmlspecialchars($news['content'])) ?></p>
             <a href="index.php?action=home" class="btn btn-secondary mt-4">Quay lại</a>
         </article>
     </div>
